@@ -23,5 +23,5 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const data = await findAllUsers();
-  res.status(200).json({ data: data });
+  res.status(200).json({ data: req.body });
 }
