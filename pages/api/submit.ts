@@ -30,7 +30,7 @@ export default async function handler(
       {
         fields: {
           Email: email,
-          Date: moment.now(),
+          Date: new Date().toISOString(),
           Name: "Webflow Form",
         },
       },
