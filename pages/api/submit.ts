@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import airtable from "airtable";
-import * as moment from "moment";
+import moment from "moment";
 
 const base = airtable.base(process.env.BASE_ID as string);
 const table = base(process.env.TABLE_NAME as string);
@@ -30,7 +30,7 @@ export default async function handler(
       {
         fields: {
           Email: email,
-          Date: new Date().toISOString(),
+          Date: moment().format("YYYY-MM-DD"),
           Name: "Webflow Form",
         },
       },
