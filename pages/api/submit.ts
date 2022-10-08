@@ -11,9 +11,9 @@ async function findAllUsers() {
       view: "Grid view",
     })
     .all();
-  const users: any = [];
+  const users: string[] = [];
   for (const user of data) {
-    users.push({ email: user.get("Email"), name: user.get("Name") });
+    users.push(user.get("Email") as string);
   }
   return users;
 }
@@ -23,6 +23,18 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const data = await findAllUsers();
-  console.log({ data: req.body });
+  const email = req.body.data["Field 2"];
+  if (!data.includes(email)) {
+    await table.create([
+      {
+        fields: {
+          Email: email,
+        },
+      },
+    ]);
+    console.log("Record added");
+  } else {
+    console.log("Redundant email");
+  }
   res.status(200).json({ data: req.body });
 }
