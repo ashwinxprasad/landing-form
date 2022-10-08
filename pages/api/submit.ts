@@ -24,7 +24,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const data = await findAllUsers();
-  const email = req.body.data["Field 2"];
+  const email = req.body.data["user_email"];
   if (!data.includes(email)) {
     await table.create([
       {
