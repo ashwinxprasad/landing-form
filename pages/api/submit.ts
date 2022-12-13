@@ -2,6 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import airtable from "airtable";
 import moment from "moment";
+import NextCors from "nextjs-cors";
 
 const base = airtable.base(process.env.BASE_ID as string);
 const table = base(process.env.TABLE_NAME as string);
@@ -23,6 +24,14 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+
+  await NextCors(req, res, {
+    // Options
+    methods: ['POST'],
+    origin: '*, ',
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  });
+
   const data = await findAllUsers();
   const email = req.body.data["user_email"];
   if (!data.includes(email)) {
