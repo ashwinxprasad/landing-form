@@ -33,6 +33,8 @@ export default async function handler(
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   });
   const email = req.body.data["user_email"];
+  console.log({ email })
+  console.log({ validate: validator.isEmail(email) });
 
   if (!validator.isEmail(email))
     return res.status(400).json({ oops: "error" })
