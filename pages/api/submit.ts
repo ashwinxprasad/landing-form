@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import airtable from "airtable";
 import moment from "moment";
 import NextCors from "nextjs-cors";
+import validator from "validator";
 
 const base = airtable.base(process.env.BASE_ID as string);
 const table = base(process.env.TABLE_NAME as string);
@@ -31,22 +32,27 @@ export default async function handler(
     origin: '*',
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   });
+  const email = req.body.data["user_email"];
+
+  if (!validator.isEmail(email))
+    return res.status(400).json({ oops: "error" })
+
 
   const data = await findAllUsers();
-  const email = req.body.data["user_email"];
-  if (!data.includes(email)) {
-    await table.create([
-      {
-        fields: {
-          Email: email,
-          Date: moment().format("YYYY-MM-DD"),
-          Name: "Webflow Form",
+  if (!email)
+    if (!data.includes(email)) {
+      await table.create([
+        {
+          fields: {
+            Email: email,
+            Date: moment().format("YYYY-MM-DD"),
+            Name: "Webflow Form",
+          },
         },
-      },
-    ]);
-    console.log("Record added");
-  } else {
-    console.log("Redundant email");
-  }
+      ]);
+      console.log("Record added");
+    } else {
+      console.log("Redundant email");
+    }
   res.status(200).json({ data: req.body });
 }
