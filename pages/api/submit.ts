@@ -36,11 +36,14 @@ export default async function handler(
   console.log({ email })
   console.log({ validate: validator.isEmail(email) });
 
-  if (!validator.isEmail(email))
+  if (!validator.isEmail(email)) {
+    console.log("Error validating", email)
     return res.status(400).json({ oops: "error" })
+  }
 
 
   const data = await findAllUsers();
+  console.log({ data })
   if (!email)
     if (!data.includes(email)) {
       await table.create([
@@ -48,7 +51,7 @@ export default async function handler(
           fields: {
             Email: email,
             Date: moment().format("YYYY-MM-DD"),
-            Name: "Webflow Form",
+            Name: "Webflow Form User",
           },
         },
       ]);
