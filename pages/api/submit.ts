@@ -46,7 +46,7 @@ export default async function handler(
     await userCollection.insertOne({
       email,
       createdAt: new Date(),
-      level: 0,
+      level: 1,
     });
   } catch (e) {
     console.log(e);
