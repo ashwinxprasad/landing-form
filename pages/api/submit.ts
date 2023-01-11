@@ -41,11 +41,16 @@ export default async function handler(
     return res.status(400).json({ oops: "error" });
   }
 
-  const userCollection: Collection = await makeUserCollection();
-  userCollection.insertOne({
-    email,
-    createdAt: new Date(),
-    level: 0,
-  });
+  try {
+    const userCollection: Collection = await makeUserCollection();
+    await userCollection.insertOne({
+      email,
+      createdAt: new Date(),
+      level: 0,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+
   res.status(200).json({ data: req.body });
 }
